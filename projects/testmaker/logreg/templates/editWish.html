@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>{{ title }}</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        <nav class="navbar navbar-light bg-light">
+            <span class="navbar-text">
+                Welcome, {{first_name}}! Let's edit your wish!
+            </span>
+            <ul class="nav nav-pills">
+                <li class="nav-item">
+                    <a class="btn nav-link" href="/logout">Logout</a>
+                </li>
+            </ul>
+        </nav>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <form action='../update/{{wish.id}}' method="POST" class="mt-5">
+                        {% for message in messages %}
+                            <div class="text-danger alert {{ message.tags }} alert-dismissible" role="alert">
+                                {{ message }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        {% endfor %}
+                        {% csrf_token %}
+                        <div class="form-group row">
+                            <label for="item" class="col-sm-2 col-form-label col-form-label-lg">I wish for:</label>
+                            <div class="col-sm-10">
+                                <input type="text" class='form-control form-control-lg' id="item" name="item" value="{{wish.item}}">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="item_desc" class="col-sm-2 col-form-label col-form-label-lg">Description:</label>
+                            <div class="col-sm-10">
+                                <textarea class="form-control form-control-lg" id="item_desc" name="item_desc" rows="1">{{wish.item_desc}}</textarea>
+                            </div>
+                        </div>
+                        <a href=".." class="btn btn-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary">Edit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    </body>
+</html>

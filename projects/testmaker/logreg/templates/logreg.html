@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>{{ title }}</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        <div class="container">
+            <h1>Welcome! Sign in to make a wish!</h1>
+            <div class="row">
+                <div class="col">
+                    <form action="register" method="POST" class="mt-5">
+                        <h1>Registration</h1>
+                        {% for message in messages %}
+                            <div class="text-danger alert {{ message.tags }} alert-dismissible" role="alert">
+                                {{ message }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        {% endfor %}
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="first_name">First Name</label>
+                            <input type="text" class="form-control form-control-lg" id="first_name" name="first_name">
+                            <div class="invalid-tooltip">Hey Now</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="last_name">Last Name</label>
+                            <input type="text" class="form-control form-control-lg" id="last_name" name="last_name">
+                        </div>
+                        <div class="form-group">
+                            <label for="email_address">Email</label>
+                            <input type="email" class="form-control form-control-lg" id="email_address" name="email_address">
+                        </div>
+                        <div class="form-group">
+                            <label for="pw">Password</label>
+                            <input type="password" class="form-control form-control-lg" id="pw" name="pw">
+                        </div>
+                        <div class="form-group">
+                            <label for="pw_confirm">Confirm Password</label>
+                            <input type="password" class="form-control form-control-lg" id="pw_confirm" name="pw_confirm">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Register</button>
+                    </form>
+                </div>
+                <div class="col">
+                    <form action="login" method="POST" class="mt-5">
+                        <h1>Login</h1>
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="email_address_lg">Email</label>
+                            <input type="email" class="form-control form-control-lg" id="email_address_lg" name="email_address_lg">
+                        </div>
+                        <div class="form-group">
+                            <label for="pw_lg">Password</label>
+                            <input type="password" class="form-control form-control-lg" id="pw_lg" name="pw_lg">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Log In</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    </body>
+</html>
