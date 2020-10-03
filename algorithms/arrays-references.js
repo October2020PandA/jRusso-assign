@@ -14,12 +14,15 @@ function reverse(arr) {
 // Rotate
 function rotate(arr, shiftBy) {
     console.log(arr);
+    if (shiftBy % arr.length == 0) {
+        return;
+    }
     shiftBy = shiftBy % arr.length;
     if (shiftBy < 0) {
         shiftBy = arr.length + shiftBy;
     }
     var j = 0, k = 0, l = arr[j], m = '';
-    if (arr.length % 2 == 0 && shiftBy % 2 ==0) {
+    if (arr.length % 2 == 0 && shiftBy % 2 == 0) {
         var j2 = 1, k2 = 0, l2 = arr[j2], m2 = '';
         for (var i = 0; i < arr.length; i = i + 2) {
             k = (j + shiftBy) % arr.length;
