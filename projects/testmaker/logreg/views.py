@@ -6,7 +6,7 @@ import bcrypt
 # Create your views here.
 def index(request):
     if 'login_id' in request.session:
-        return redirect('/')
+        return redirect('/home/')
     context = {
         'title': 'Test Maker App - Welcome',
     }

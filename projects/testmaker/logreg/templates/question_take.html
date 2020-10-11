@@ -17,7 +17,7 @@
         <![endif]-->
         <nav class="navbar navbar-light bg-light">
             <span class="navbar-text">
-                Welcome, {{first_name}}! Make a wish!
+                Welcome, {{first_name}}! Let's edit your wish!
             </span>
             <ul class="nav nav-pills">
                 <li class="nav-item">
@@ -26,35 +26,38 @@
             </ul>
         </nav>
         <div class="container">
-            <div class="row">
-                <div class="col">
-                    <form action='../create/' method="POST" class="mt-5">
-                        {% for message in messages %}
-                            <div class="text-danger alert {{ message.tags }} alert-dismissible" role="alert">
-                                {{ message }}
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                                </button>
+            <form action="submit" method="POST" class="mt-5">
+                {% csrf_token %}
+                {% for question in questions %}
+                {{question.question_type.type_name}}
+                <div class="row">
+                    <div class="col">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="question-addon{{question.id}}">Question:</span>
                             </div>
-                        {% endfor %}
-                        {% csrf_token %}
-                        <div class="form-group row">
-                            <label for="item" class="col-sm-2 col-form-label col-form-label-lg">I wish for:</label>
-                            <div class="col-sm-10">
-                                <input type="text" class='form-control form-control-lg' id="item"   name="item">
-                            </div>
+                            <input type="text" class="form-control" id="question{{question.id}}" aria-label="question{{question.id}}" aria-describedby="question-addon{{question.id}}" value="{{question.question}}" disabled>
                         </div>
-                        <div class="form-group row">
-                            <label for="item_desc" class="col-sm-2 col-form-label col-form-label-lg">Description:</label>
-                            <div class="col-sm-10">
-                                <textarea class="form-control form-control-lg" id="item_desc" name="item_desc" rows="1"></textarea>
+                    </div>
+                    <input type="hidden" name="question{{question.id}}_id" value="{{question.id}}">
+                    {% if question.question_type.type_name == 'True/False' %}
+                    <div class="col">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="answer_{{question.id}}">Answer:</label>
                             </div>
+                            <select class="custom-select" id="answer_{{question.id}}" name="answer_{{question.id}}" required>
+                                <option value="" selected disabled>Choose...</option>
+                                <option value="1">True</option>
+                                <option value="0">False</option>
+                            </select>
                         </div>
-                        <a href=".." class="btn btn-secondary">Cancel</a>
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </form>
+                    </div>
+                    {% endif %}
                 </div>
-            </div>
+                {% endfor %}
+                <button type="submit" class="btn btn-primary">Submit Answers</button>
+            </form>
         </div>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>

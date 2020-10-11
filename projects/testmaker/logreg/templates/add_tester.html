@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>{{ title }}</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        <nav class="navbar navbar-light bg-light">
+            <span class="navbar-text">
+                Welcome, {{first_name}}! Let's edit your wish!
+            </span>
+            <ul class="nav nav-pills">
+                <li class="nav-item">
+                    <a class="btn nav-link" href="/logout">Logout</a>
+                </li>
+            </ul>
+        </nav>
+        <div class="container">
+            {% if testers %}
+            <div class="col mt-4">
+                <ul>
+                    {% for tester in testers %}
+                    <li>{{ tester.user.last_name }}, {{ tester.user.first_name }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+            {% if users %}
+            <form action="add" method="POST" class="mt-5">
+                {% csrf_token %}
+                <div class="col">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="user_add">Tester:</label>
+                        </div>
+                        <select class="custom-select" id="user_add" name="user_add" required>
+                            <option value="" selected disabled>Choose a tester..</option>
+                            {% for user in users %}
+                            <option value="{{ user.id }}">{{ user.last_name }}, {{ user.first_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Add Tester</button>
+            </form>
+            {% endif %}
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    </body>
+</html>

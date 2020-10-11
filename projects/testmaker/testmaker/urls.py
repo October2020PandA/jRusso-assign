@@ -18,5 +18,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('', include('logreg.urls')),
+    path('question/', include('questionCreator.urls')),
+    path('home/', include('questionTaker.urls')),
     path('admin/', admin.site.urls),
 ]

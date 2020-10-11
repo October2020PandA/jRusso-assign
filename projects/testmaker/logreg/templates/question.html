@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>{{ title }}</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        <nav class="navbar navbar-light bg-light">
+            <span class="navbar-text">
+                Welcome, {{first_name}}! Let's edit your wish!
+            </span>
+            <ul class="nav nav-pills">
+                <li class="nav-item">
+                    <a class="btn nav-link" href="/logout">Logout</a>
+                </li>
+            </ul>
+        </nav>
+        <div class="container">
+            <table class="table table-hover mt-5">
+                <caption>Question Group List</caption>
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col" colspan="2">Question Group</th>
+                    </tr>
+                </thead>
+                {% for question_group in question_groups %}
+                <tbody>
+                    <tr>
+                        <th scope="row">{{ question_group.id }}</th>
+                        <td><a href="question_group/{{question_group.id}}/">{{question_group.group_name }}</a></td>
+                        <td><a href="question_group/{{question_group.id}}/testers/">+ Add Testers</a></td>
+                    </tr>
+                </tbody>
+                {% endfor %}
+                <tbody>
+                    <tr>
+                        <th colspan="2"><a href="question_group/">+ Add a New Question Group</a></th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    </body>
+</html>
