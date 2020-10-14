@@ -17,9 +17,15 @@
         <![endif]-->
         <nav class="navbar navbar-light bg-light">
             <span class="navbar-text">
-                Welcome, {{first_name}}! Let's edit your wish!
+                Welcome, {{first_name}}!
             </span>
             <ul class="nav nav-pills">
+                <li class="nav-item">
+                    <a class="btn nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn nav-link" href="/question/">Edit Question Groups</a>
+                </li>
                 <li class="nav-item">
                     <a class="btn nav-link" href="/logout">Logout</a>
                 </li>
@@ -30,27 +36,162 @@
                 <caption>Question Group List</caption>
                 <thead class="thead-light">
                     <tr>
-                        <th scope="col"></th>
-                        <th scope="col" colspan="2">Question Group</th>
+                        <th scope="col" colspan="3">Question Group</th>
                     </tr>
                 </thead>
+                <tbody class="question-group-listing">
                 {% for question_group in question_groups %}
-                <tbody>
                     <tr>
-                        <th scope="row">{{ question_group.id }}</th>
-                        <td><a href="question_group/{{question_group.id}}/">{{question_group.group_name }}</a></td>
-                        <td><a href="question_group/{{question_group.id}}/testers/">+ Add Testers</a></td>
+                        <td>
+                            <form action="question_group/{{question_group.id}}/" method="POST" class="question-group-select">
+                                {% csrf_token %}
+                                <input type="hidden" id="qg-num" name="qg-num" value="{{question_group.id}}">
+                                <button type="submit" class="btn btn-link">{{question_group.group_name }}</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form action="question_group/{{question_group.id}}/question/" method="POST" class="question-add">
+                                {% csrf_token %}
+                                <input type="hidden" id="qg-num" name="qg-num" value="{{question_group.id}}">
+                                <button type="submit" class="btn btn-link">+ Add a Question</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form action="question_group/{{question_group.id}}/testers/" method="POST" class="tester-add">
+                                {% csrf_token %}
+                                <input type="hidden" id="qg-num" name="qg-num" value="{{question_group.id}}">
+                                <button type="submit" class="btn btn-link">+ Add Testers</button>
+                            </form>
+                        </td>
                     </tr>
-                </tbody>
                 {% endfor %}
-                <tbody>
                     <tr>
-                        <th colspan="2"><a href="question_group/">+ Add a New Question Group</a></th>
+                        <th colspan="3">
+                            <button type="button" class="btn btn-link" data-toggle="modal" data-target="#questionGroupModal">
+                                + Add a New Question Group
+                            </button>
+                        </th>
                     </tr>
                 </tbody>
             </table>
+            <div class="question-group-viewer">
+
+            </div>
+        </div>
+        <div class="modal fade" id="questionGroupModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">New Question Group</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form action="create" method="POST" class="question-group-form">
+                        <div class="modal-body">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="id_group_name">Question Group Name:</label>
+                                <input type="text" class="form-control form-control-lg" id="id_group_name" name="id_group_name">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Add Questions</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="testerAddModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content tester-modal">
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="questionAddModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content question-modal">
+                </div>
+            </div>
         </div>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+        <script>
+            $("tr").click(function() {
+                $(this).parent().children().removeClass('table-success');
+                $(this).addClass('table-success');
+            })
+            $('body').on("submit", ".question-group-form", function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: 'question_group/create',
+                    method: 'post',
+                    data: $(this).serialize(),
+                    success: function(ServerResponse) {
+                        $('.question-group-listing').html(ServerResponse)
+                    }
+                });
+                $('#questionGroupModal').modal('toggle');
+            });
+            $('body').on("submit", ".tester-add", function(e) {
+                e.preventDefault();
+                $('#testerAddModal').modal('toggle');
+                $.ajax({
+                    url: 'question_group/testers/',
+                    method: 'post',
+                    data: $(this).serialize(),
+                    success: function(ServerResponse) {
+                        $('.tester-modal').html(ServerResponse)
+                    }
+                });
+            });
+            $('body').on("submit", ".tester-add-form", function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: 'question_group/testers/add/',
+                    method: 'post',
+                    data: $(this).serialize(),
+                    success: function(ServerResponse) {
+                        $('.tester-modal').html(ServerResponse)
+                    }
+                });
+            });
+            $('body').on("submit", ".question-add", function(e) {
+                e.preventDefault();
+                $('#questionAddModal').modal('toggle');
+                $.ajax({
+                    url: 'question_group/question/',
+                    method: 'post',
+                    data: $(this).serialize(),
+                    success: function(ServerResponse) {
+                        $('.question-modal').html(ServerResponse)
+                    }
+                });
+            });
+            $('body').on("submit", ".question-add-form", function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: 'question_group/question/add/',
+                    method: 'post',
+                    data: $(this).serialize(),
+                    success: function(ServerResponse) {
+                        $('.question-group-viewer').html(ServerResponse)
+                    }
+                });
+                $('#questionAddModal').modal('toggle');
+            });
+            $('body').on("submit", ".question-group-select", function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: 'question_group/view/',
+                    method: 'post',
+                    data: $(this).serialize(),
+                    success: function(ServerResponse) {
+                        $('.question-group-viewer').html(ServerResponse)
+                    }
+                });
+            });
+        </script>
     </body>
 </html>

@@ -17,9 +17,15 @@
         <![endif]-->
         <nav class="navbar navbar-light bg-light">
             <span class="navbar-text">
-                Welcome, {{first_name}}! Let's edit your wish!
+                Welcome, {{first_name}}!
             </span>
             <ul class="nav nav-pills">
+                <li class="nav-item">
+                    <a class="btn nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn nav-link" href="/question/">Edit Question Groups</a>
+                </li>
                 <li class="nav-item">
                     <a class="btn nav-link" href="/logout">Logout</a>
                 </li>
@@ -31,14 +37,12 @@
                 <caption>Question Group List</caption>
                 <thead class="thead-light">
                     <tr>
-                        <th scope="col"></th>
-                        <th scope="col" colspan="2">Question Group</th>
+                        <th scope="col">Question Group</th>
                     </tr>
                 </thead>
                 {% for question_group in question_groups %}
                 <tbody>
                     <tr>
-                        <th scope="row">{{ question_group.id }}</th>
                         <td><a href="{{question_group.id}}/">{{question_group.group_name }}</a></td>
                     </tr>
                 </tbody>
@@ -46,26 +50,50 @@
             </table>
             {% endif %}
             {% if completed_groups %}
-            <table class="table table-hover mt-5">
+            <table class="table table-hover mt-5 qg-table">
                 <caption>Completed Question Group List</caption>
                 <thead class="thead-light">
                     <tr>
-                        <th scope="col"></th>
-                        <th scope="col" colspan="2">Question Group</th>
+                        <th scope="col">Question Group</th>
                     </tr>
                 </thead>
                 {% for completed_group in completed_groups %}
                 <tbody>
                     <tr>
-                        <th scope="row">{{ completed_group.id }}</th>
-                        <td><a href="{{completed_group.id}}/review/">{{completed_group.group_name }}</a></td>
+                        <td>
+                            <form action="question_group/{{completed_group.id}}/" method="POST" class="question-group-select">
+                                {% csrf_token %}
+                                <input type="hidden" id="qg-num" name="qg-num" value="{{completed_group.id}}">
+                                <button type="submit" class="btn btn-link">{{completed_group.group_name }}</button>
+                            </form>
+                        </td>
                     </tr>
                 </tbody>
                 {% endfor %}
             </table>
             {% endif %}
+            <div class="question-group-viewer">
+
+            </div>
         </div>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+        <script>
+            $(".qg-table tr").click(function() {
+                $(this).parent().parent().children().children().removeClass('table-success');
+                $(this).addClass('table-success');
+            })
+            $('body').on("submit", ".question-group-select", function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: 'review/',
+                    method: 'post',
+                    data: $(this).serialize(),
+                    success: function(ServerResponse) {
+                        $('.question-group-viewer').html(ServerResponse)
+                    }
+                });
+            });
+        </script>
     </body>
 </html>

@@ -1,0 +1,22 @@
+
+                {% for question in questions %}
+                {{question.question_type.type_name}}
+                <div class="row">
+                    <div class="col">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="question-addon{{question.id}}">Question:</span>
+                            </div>
+                            <input type="text" class="form-control" id="question{{question.id}}" aria-label="question{{question.id}}" aria-describedby="question-addon{{question.id}}" value="{{question.question}}" disabled>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="answer-addon{{question.id}}">Answer:</span>
+                            </div>
+                            <input type="text" class="form-control" id="answer{{question.id}}" aria-label="answer{{question.id}}" aria-describedby="answer-addon{{question.id}}" value="{{question.answer}}" disabled>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}

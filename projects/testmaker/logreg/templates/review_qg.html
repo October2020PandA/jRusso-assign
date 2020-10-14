@@ -1,0 +1,51 @@
+
+            <form action="submit" method="POST" class="mt-5">
+                {% csrf_token %}
+                {% for answ in answers %}
+                {{answ.question.question_type.type_name}}
+                <div class="row">
+                    <div class="col-1">
+                        {% if answ.is_correct == True %}
+                        <span class="badge badge-success">Correct</span>
+                        {% else %}
+                        <span class="badge badge-danger">Incorrect</span>
+                        {% endif %}
+                    </div>
+                    <div class="col">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="question-addon{{question.id}}">Question:</span>
+                            </div>
+                            <input type="text" class="form-control" id="question{{question.id}}" aria-label="question{{question.id}}" aria-describedby="question-addon{{question.id}}" value="{{answ.question.question}}" disabled>
+                        </div>
+                    </div>
+                    <input type="hidden" name="question{{question.id}}_id" value="{{question.id}}">
+                    {% if answ.question.question_type.type_name == 'True/False' %}
+                    <div class="col">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="answer_{{question.id}}">Answer:</label>
+                            </div>
+                            <select class="custom-select" id="answer_{{question.id}}" name="answer_{{question.id}}" disabled>
+                                {% if answ.answer == 'True' %}
+                                <option value="1" selected>True</option>
+                                {% elif answ.answer == 'False' %}
+                                <option value="0" selected>False</option>
+                                {% endif %}
+                            </select>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if answ.question.question_type.type_name == 'Short Answer' %}
+                    <div class="col">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="answer_{{question.id}}">Answer:</label>
+                            </div>
+                            <input type="text" class="form-control" id="answer_{{question.id}}" aria-label="answer_{{question.id}}" aria-describedby="answer_{{question.id}}" value="{{answ.answer}}" disabled>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </form>

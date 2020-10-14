@@ -1,0 +1,39 @@
+
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Testers</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form action="create" method="POST" class="tester-add-form">
+                        <div class="modal-body">
+                            {% if testers %}
+                                <ul>
+                                    {% for tester in testers %}
+                                    <li>{{ tester.user.last_name }}, {{ tester.user.first_name }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                            {% csrf_token %}
+                            <input type="hidden" id="qg-num" name="qg-num" value="{{question_group}}">
+                            {% if users %}
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <label class="input-group-text" for="user_add">Tester:</label>
+                                </div>
+                                <select class="custom-select" id="user_add" name="user_add" required>
+                                    <option value="" selected disabled>Choose a tester..</option>
+                                    {% for user in users %}
+                                    <option value="{{ user.id }}">{{ user.last_name }}, {{ user.first_name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            {% if users %}
+                            <button type="submit" class="btn btn-primary">Add Tester</button>
+                            {% endif %}
+                        </div>
+                    </form>

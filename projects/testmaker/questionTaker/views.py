@@ -40,4 +40,23 @@ def submitTest(request, tid):
     c_group = CompleteGroup.objects.get(user=user_data, question_group=q_group)
     c_group.is_completed=1
     c_group.save()
+    return redirect('grade/')
+
+def reviewQG(request):
+    if request.method == 'POST':
+        context = {
+            'questions': Question.objects.filter(question_group=QuestionGroup.objects.get(id=request.POST['qg-num'])).all(),
+            'answers': Answer.objects.filter(question_group=QuestionGroup.objects.get(id=request.POST['qg-num']), user=User.objects.get(id=request.session['login_id'])),
+        } 
+        return render(request, 'review_qg.html', context)
+    return redirect('/')
+
+def grade(request, tid):
+    user_data = User.objects.get(id=request.session['login_id'])
+    q_group = QuestionGroup.objects.get(id=tid)
+    answers = Answer.objects.filter(user=user_data, question_group=q_group)
+    for answer in answers:
+        if answer.answer == answer.question.answer:
+            answer.is_correct = '1'
+            answer.save()
     return redirect('/')

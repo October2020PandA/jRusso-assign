@@ -8,6 +8,7 @@ class Answer(models.Model):
     question_group = models.ForeignKey(QuestionGroup, related_name='answers', on_delete=models.CASCADE)
     question = models.ForeignKey(Question, related_name='answers', on_delete=models.CASCADE)
     answer = models.CharField(max_length=255)
+    is_correct = models.BooleanField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

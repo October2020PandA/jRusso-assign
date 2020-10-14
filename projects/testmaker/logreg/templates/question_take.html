@@ -17,9 +17,15 @@
         <![endif]-->
         <nav class="navbar navbar-light bg-light">
             <span class="navbar-text">
-                Welcome, {{first_name}}! Let's edit your wish!
+                Welcome, {{first_name}}!
             </span>
             <ul class="nav nav-pills">
+                <li class="nav-item">
+                    <a class="btn nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn nav-link" href="/question/">Edit Question Groups</a>
+                </li>
                 <li class="nav-item">
                     <a class="btn nav-link" href="/logout">Logout</a>
                 </li>
@@ -51,6 +57,16 @@
                                 <option value="1">True</option>
                                 <option value="0">False</option>
                             </select>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if question.question_type.type_name == 'Short Answer' %}
+                    <div class="col">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="answer_{{question.id}}">Answer:</label>
+                            </div>
+                            <input type="text" class="form-control" id="answer_{{question.id}}" name="answer_{{question.id}}" aria-label="answer_{{question.id}}" aria-describedby="answer_{{question.id}}" required>
                         </div>
                     </div>
                     {% endif %}
